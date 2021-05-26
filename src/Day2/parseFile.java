@@ -8,7 +8,7 @@ public class parseFile {
     public HashMap<String,String> readInput() {
         HashMap<String,String> passInput = new HashMap<>();
 
-        try(BufferedReader bReader = new BufferedReader(new FileReader("src/Day2/testInput"))) {
+        try(BufferedReader bReader = new BufferedReader(new FileReader("src/Day2/PassInput"))) {
             String currentLine;
 
             while((currentLine = bReader.readLine()) != null) {
