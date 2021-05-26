@@ -30,7 +30,7 @@ public class ToboTraj {
         int numTrees = 0;
 
         for(int col = 3; col < expandedMap[0].length; col = col + 3) {
-            if(row < mapData.size() && row != 323) {
+            if(row < mapData.size() && row != expandedMap.length) {
                 row++;
             }
 
