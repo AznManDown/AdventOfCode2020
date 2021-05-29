@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class ToboTraj {
 
-    public static char[][] generateMap(ArrayList mapData) {
+    public static char[][] generateMap(ArrayList mapData, int length) {
         int mapHeight = mapData.size();
-        int mapLength = 3 * mapHeight;
+        int mapLength = length * mapHeight;
         int currentChar = 0;
         char[][] createdMap = new char[mapHeight][mapLength];
 
@@ -21,27 +21,48 @@ public class ToboTraj {
         return createdMap;
     }
 
+    public static int calculatePath(char[][]expandedMap, int x,int y) {
+        int row = y - 1;
+        int numTrees = 0;
+
+            for(int col = x; col < expandedMap[0].length && row < expandedMap.length; col = col + x) {
+                row = row + y;
+
+                if(row < expandedMap.length && expandedMap[row][col] == '#') {
+                    numTrees++;
+                }
+            }
+        return numTrees;
+    }
+
     public static void main(String[] args) {
         parseData inputData = new parseData();
         ArrayList<String> mapData = inputData.readInput();
 
-        char[][] expandedMap = generateMap(mapData);
-        int row = 0;
-        int numTrees = 0;
+        int[] xVal = {1,3,5,7,1};
+        int[] yVal = {1,1,1,1,2};
+        ArrayList<Integer> resultList = new ArrayList<>();
 
-        for(int col = 3; col < expandedMap[0].length; col = col + 3) {
-            if(row < mapData.size() && row != expandedMap.length) {
-                row++;
-            }
+//        char[][] expandedMap = generateMap(mapData, 1);
+//
+//        System.out.println(calculatePath(expandedMap, 1, 2));
 
-            if(expandedMap[row][col] == '#') {
-                numTrees++;
-            }
+        for(int x = 0; x < xVal.length; x++) {
+            char[][] expandedMap = generateMap(mapData, xVal[x]);
+            int result = calculatePath(expandedMap, xVal[x], yVal[x]);
 
-            System.out.println(expandedMap[row][col]);
+            resultList.add(result);
+
+            System.out.println("Result for X:" + xVal[x] + " Y:" + yVal[x] + " is: " + result);
         }
 
-        System.out.println(numTrees);
+        int value = resultList.get(0);
+        int sum = 0;
 
+        for(int y = 0; y < resultList.size() - 1; y++) {
+            int nextVal = resultList.get(y + 1);
+            value = value * nextVal;
+        }
+        System.out.println(value);
     }
 }
