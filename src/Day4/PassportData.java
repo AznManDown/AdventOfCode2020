@@ -1,22 +1,22 @@
 public class PassportData {
-    public int birthYear;
-    public int issueYear;
-    public int expYear;
+    public long birthYear;
+    public long issueYear;
+    public long expYear;
     public String height;
     public String hairColor;
     public String eyeColor;
-    public int passID;
-    public int countryID;
+    public long passID;
+    public long countryID;
 
     public PassportData(
-        int birthYear,
-        int issueYear,
-        int expYear,
+        long birthYear,
+        long issueYear,
+        long expYear,
         String height,
         String hairColor,
         String eyeColor,
-        int passID,
-        int countryID
+        long passID,
+        long countryID
     ) {
         this.birthYear = birthYear;
         this.issueYear = issueYear;

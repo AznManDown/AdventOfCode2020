@@ -20,16 +20,17 @@ public class PassportScanner {
                 }
             }
         }
+        //Loop Iteration missing last passport. Adding manually outside of loop.
+        passportSorted.add(currentPassport);
         return passportSorted;
     }
 
     public static HashMap<Integer, PassportData> parsePassport(ArrayList<String> sortedData) {
         HashMap<Integer, PassportData> passportDB = new HashMap<>();
-        PassportData template = new PassportData(0, 0,0,null,null,null,0,0);
 
         //Init Passport DB
         for(int x = 0; x < sortedData.size(); x++) {
-            passportDB.put(x, template);
+            passportDB.put(x, new PassportData(0,0,0,null,null,null,0,0));
         }
 
         int passportNum = 0;
@@ -41,13 +42,25 @@ public class PassportScanner {
 
                 switch (temp[0]) {
                     case "byr":
-                        passportDB.get(passportNum).birthYear = Integer.parseInt(temp[1]);
+                        try {
+                            passportDB.get(passportNum).birthYear = Long.parseLong(temp[1]);
+                        } catch (Exception error) {
+                            System.out.println("Invalid Data in Birth Year: " + temp[1]);
+                        }
                         break;
                     case "iyr":
-                        passportDB.get(passportNum).issueYear = Integer.parseInt(temp[1]);
+                        try {
+                            passportDB.get(passportNum).issueYear = Long.parseLong(temp[1]);
+                        } catch (Exception error) {
+                            System.out.println("Invalid Data in Issue Year: " + temp[1]);
+                        }
                         break;
                     case "eyr":
-                        passportDB.get(passportNum).expYear = Integer.parseInt(temp[1]);
+                        try {
+                            passportDB.get(passportNum).expYear = Long.parseLong(temp[1]);
+                        } catch (Exception error) {
+                            System.out.println("Invalid Data in eye color: " + temp[1]);
+                        }
                         break;
                     case "hgt":
                         passportDB.get(passportNum).height = temp[1];
@@ -59,10 +72,19 @@ public class PassportScanner {
                         passportDB.get(passportNum).eyeColor = temp[1];
                         break;
                     case "pid":
-                        passportDB.get(passportNum).passID = Integer.parseInt(temp[1]);
+                        try {
+                            passportDB.get(passportNum).passID = Long.parseLong(temp[1]);
+                        } catch (Exception error) {
+                            passportDB.get(passportNum).passID = 1;
+                            System.out.println("Invalid Data in PassID:" + temp[1]);
+                        }
                         break;
                     case "cid":
-                        passportDB.get(passportNum).countryID = Integer.parseInt(temp[1]);
+                        try {
+                            passportDB.get(passportNum).countryID = Long.parseLong(temp[1]);
+                        } catch (Exception error) {
+                            System.out.println("Invalid Data in Country ID: " + temp[1]);
+                        }
                         break;
                 }
             }
@@ -71,8 +93,24 @@ public class PassportScanner {
         return passportDB;
     }
 
-    public void passportCheck() {
+    public static void passportCheck(HashMap<Integer, PassportData> passportData) {
+        int validPassports = 0;
+        for(int x = 0; x < passportData.size(); x++) {
+            PassportData currentPassport = passportData.get(x);
 
+            if(
+                    currentPassport.birthYear != 0 &&
+                    currentPassport.issueYear != 0 &&
+                    currentPassport.expYear != 0 &&
+                    currentPassport.height != null &&
+                    currentPassport.hairColor != null &&
+                    currentPassport.eyeColor != null &&
+                    currentPassport.passID != 0
+            ) {
+                validPassports++;
+            }
+        }
+        System.out.println(validPassports);
     }
 
     public static void main(String[] args) {
@@ -83,6 +121,6 @@ public class PassportScanner {
         //Parsed Passport Data
         HashMap<Integer, PassportData> passportData = parsePassport(sortedData);
 
-        System.out.println(passportData.get(0).eyeColor);
+        passportCheck(passportData);
     }
 }
